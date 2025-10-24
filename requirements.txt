@@ -1,0 +1,8 @@
+flask
+torch
+torchvision
+pillow
+sentence-transformers
+numpy
+scikit-learn
+joblib
