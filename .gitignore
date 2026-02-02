@@ -1,0 +1,21 @@
+# Environment variables
+.env
+
+# Firebase credentials
+serviceAccountKey.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+
+# Uploads
+static/uploads/*
+
+# IDE
+.vscode/
+.idea/

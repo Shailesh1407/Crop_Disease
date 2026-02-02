@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Community - CropCare AI</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+	<style>
+		.community-container {
+			max-width: 1400px;
+			margin: 40px auto;
+			padding: 20px;
+		}
+		.community-header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+		.community-header h1 {
+			color: var(--primary-600);
+			font-size: 36px;
+			margin-bottom: 10px;
+		}
+		.tabs {
+			display: flex;
+			gap: 12px;
+			margin-bottom: 30px;
+			border-bottom: 2px solid var(--gray-200);
+			justify-content: center;
+		}
+		.tab {
+			padding: 12px 24px;
+			background: none;
+			border: none;
+			color: var(--gray-600);
+			font-weight: 600;
+			cursor: pointer;
+			border-bottom: 3px solid transparent;
+			transition: all 0.3s ease;
+		}
+		.tab:hover {
+			color: var(--primary-600);
+		}
+		.tab.active {
+			color: var(--primary-600);
+			border-bottom-color: var(--primary-600);
+		}
+		.tab-content {
+			display: none;
+		}
+		.tab-content.active {
+			display: block;
+		}
+		.post-card {
+			background: white;
+			border-radius: 12px;
+			padding: 20px;
+			margin-bottom: 16px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+			border-left: 4px solid var(--primary-500);
+			transition: all 0.3s ease;
+		}
+		.post-card:hover {
+			transform: translateX(4px);
+			box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+		}
+		.post-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: start;
+			margin-bottom: 12px;
+		}
+		.post-title {
+			font-size: 18px;
+			font-weight: 700;
+			color: var(--dark-900);
+			margin-bottom: 8px;
+		}
+		.post-meta {
+			display: flex;
+			gap: 16px;
+			font-size: 13px;
+			color: var(--gray-500);
+			margin-bottom: 12px;
+		}
+		.post-content {
+			color: var(--gray-700);
+			line-height: 1.6;
+			margin-bottom: 12px;
+		}
+		.post-footer {
+			display: flex;
+			gap: 16px;
+			align-items: center;
+			padding-top: 12px;
+			border-top: 1px solid var(--gray-100);
+		}
+		.post-badge {
+			padding: 4px 12px;
+			border-radius: 12px;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		.badge-alert {
+			background: #fee2e2;
+			color: #991b1b;
+		}
+		.badge-story {
+			background: #d1fae5;
+			color: #065f46;
+		}
+		.badge-question {
+			background: #dbeafe;
+			color: #1e40af;
+		}
+		.create-post-btn {
+			position: fixed;
+			bottom: 30px;
+			right: 30px;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+			color: white;
+			border: none;
+			font-size: 24px;
+			cursor: pointer;
+			box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+			transition: all 0.3s ease;
+		}
+		.create-post-btn:hover {
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+		}
+		.modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 1000;
+			align-items: center;
+			justify-content: center;
+		}
+		.modal.active {
+			display: flex;
+		}
+		.modal-content {
+			background: white;
+			border-radius: 16px;
+			padding: 30px;
+			max-width: 600px;
+			width: 90%;
+			max-height: 80vh;
+			overflow-y: auto;
+		}
+		.modal-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+		.modal-header h2 {
+			color: var(--primary-600);
+			font-size: 24px;
+		}
+		.close-modal {
+			background: none;
+			border: none;
+			font-size: 24px;
+			cursor: pointer;
+			color: var(--gray-500);
+		}
+		.form-group {
+			margin-bottom: 20px;
+		}
+		.form-group label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 600;
+			color: var(--dark-800);
+		}
+		.form-group input,
+		.form-group textarea,
+		.form-group select {
+			width: 100%;
+			padding: 12px;
+			border: 2px solid var(--gray-200);
+			border-radius: 8px;
+			font-size: 14px;
+		}
+		.form-group textarea {
+			min-height: 120px;
+			resize: vertical;
+		}
+		.submit-btn {
+			width: 100%;
+			padding: 14px;
+			background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-weight: 600;
+			font-size: 16px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+		.submit-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+		}
+		.empty-state {
+			text-align: center;
+			padding: 60px 20px;
+			color: var(--gray-500);
+		}
+		.empty-state i {
+			font-size: 64px;
+			color: var(--gray-300);
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<div class="logo">
+			<div class="logo-icon">C</div>
+			CropCare AI
+		</div>
+		<div class="nav-links">
+			<a href="/"><i class="fas fa-home"></i> Home</a>
+			{% if session.user %}
+				<a href="/predict"><i class="fas fa-microscope"></i> Predict</a>
+				<a href="/history"><i class="fas fa-history"></i> History</a>
+				<a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+				<a href="/community" class="active"><i class="fas fa-users"></i> Community</a>
+			{% endif %}
+			<a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+			{% if session.user %}
+				<div class="user-profile">
+					<div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+					<span class="user-name">{{ session.user.name }}</span>
+				</div>
+				<a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+			{% else %}
+				<a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<div class="community-container">
+		<div class="community-header">
+			<h1><i class="fas fa-users"></i> Community Forum</h1>
+			<p>Connect with farmers, share experiences, and get help from the community</p>
+		</div>
+
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="alert alert-{{ category }}" style="padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; max-width: 800px; margin-left: auto; margin-right: auto;">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+
+		<!-- Tabs -->
+		<div class="tabs">
+			<button class="tab active" onclick="showTab('forum')">
+				<i class="fas fa-comments"></i> Forum ({{ posts|length }})
+			</button>
+			<button class="tab" onclick="showTab('alerts')">
+				<i class="fas fa-exclamation-triangle"></i> Disease Alerts ({{ alerts|length }})
+			</button>
+			<button class="tab" onclick="showTab('stories')">
+				<i class="fas fa-trophy"></i> Success Stories ({{ stories|length }})
+			</button>
+		</div>
+
+		<!-- Forum Tab -->
+		<div id="forum" class="tab-content active">
+			{% if posts %}
+				{% for post in posts %}
+					<div class="post-card">
+						<div class="post-header">
+							<div>
+								<div class="post-title">{{ post.title }}</div>
+								<div class="post-meta">
+									<span><i class="fas fa-user"></i> {{ post.user_name }}</span>
+									<span><i class="fas fa-clock"></i> {{ post.timestamp.strftime('%b %d, %Y') if post.timestamp else 'Recently' }}</span>
+									{% if post.location %}
+										<span><i class="fas fa-map-marker-alt"></i> {{ post.location }}</span>
+									{% endif %}
+								</div>
+							</div>
+							<span class="post-badge badge-question">Question</span>
+						</div>
+						<div class="post-content">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</div>
+						<div class="post-footer">
+							<a href="/community/post/{{ post.id }}" style="color: var(--primary-600); text-decoration: none; font-weight: 600;">
+								<i class="fas fa-comment"></i> {{ post.replies }} Replies
+							</a>
+							<a href="/community/post/{{ post.id }}" style="color: var(--primary-600); text-decoration: none;">
+								View Discussion →
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="empty-state">
+					<i class="fas fa-comments"></i>
+					<h3>No Posts Yet</h3>
+					<p>Be the first to start a discussion!</p>
+				</div>
+			{% endif %}
+		</div>
+
+		<!-- Alerts Tab -->
+		<div id="alerts" class="tab-content">
+			{% if alerts %}
+				{% for alert in alerts %}
+					<div class="post-card" style="border-left-color: #ef4444;">
+						<div class="post-header">
+							<div>
+								<div class="post-title">{{ alert.title }}</div>
+								<div class="post-meta">
+									<span><i class="fas fa-user"></i> {{ alert.user_name }}</span>
+									<span><i class="fas fa-clock"></i> {{ alert.timestamp.strftime('%b %d, %Y') if alert.timestamp else 'Recently' }}</span>
+									{% if alert.location %}
+										<span><i class="fas fa-map-marker-alt"></i> {{ alert.location }}</span>
+									{% endif %}
+									{% if alert.disease %}
+										<span><i class="fas fa-virus"></i> {{ alert.disease }}</span>
+									{% endif %}
+								</div>
+							</div>
+							<span class="post-badge badge-alert">Alert</span>
+						</div>
+						<div class="post-content">{{ alert.content[:200] }}{% if alert.content|length > 200 %}...{% endif %}</div>
+						<div class="post-footer">
+							<a href="/community/post/{{ alert.id }}" style="color: #ef4444; text-decoration: none; font-weight: 600;">
+								<i class="fas fa-comment"></i> {{ alert.replies }} Replies
+							</a>
+							<a href="/community/post/{{ alert.id }}" style="color: #ef4444; text-decoration: none;">
+								View Alert →
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="empty-state">
+					<i class="fas fa-exclamation-triangle"></i>
+					<h3>No Alerts Yet</h3>
+					<p>Report disease outbreaks in your area to help others!</p>
+				</div>
+			{% endif %}
+		</div>
+
+		<!-- Success Stories Tab -->
+		<div id="stories" class="tab-content">
+			{% if stories %}
+				{% for story in stories %}
+					<div class="post-card" style="border-left-color: #10b981;">
+						<div class="post-header">
+							<div>
+								<div class="post-title">{{ story.title }}</div>
+								<div class="post-meta">
+									<span><i class="fas fa-user"></i> {{ story.user_name }}</span>
+									<span><i class="fas fa-clock"></i> {{ story.timestamp.strftime('%b %d, %Y') if story.timestamp else 'Recently' }}</span>
+									{% if story.disease %}
+										<span><i class="fas fa-check-circle"></i> Treated: {{ story.disease }}</span>
+									{% endif %}
+								</div>
+							</div>
+							<span class="post-badge badge-story">Success</span>
+						</div>
+						<div class="post-content">{{ story.content[:200] }}{% if story.content|length > 200 %}...{% endif %}</div>
+						<div class="post-footer">
+							<a href="/community/post/{{ story.id }}" style="color: #10b981; text-decoration: none; font-weight: 600;">
+								<i class="fas fa-comment"></i> {{ story.replies }} Replies
+							</a>
+							<a href="/community/post/{{ story.id }}" style="color: #10b981; text-decoration: none;">
+								Read Story →
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="empty-state">
+					<i class="fas fa-trophy"></i>
+					<h3>No Success Stories Yet</h3>
+					<p>Share your successful treatment experiences!</p>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+	<!-- Create Post Button -->
+	{% if session.user %}
+	<button class="create-post-btn" onclick="openModal()">
+		<i class="fas fa-plus"></i>
+	</button>
+	{% endif %}
+
+	<!-- Create Post Modal -->
+	<div id="createPostModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2><i class="fas fa-edit"></i> Create Post</h2>
+				<button class="close-modal" onclick="closeModal()">&times;</button>
+			</div>
+			<form method="POST" action="/community/post">
+				<div class="form-group">
+					<label for="post_type">Post Type</label>
+					<select id="post_type" name="post_type" required>
+						<option value="question">Question / Discussion</option>
+						<option value="alert">Disease Alert</option>
+						<option value="story">Success Story</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="title">Title</label>
+					<input type="text" id="title" name="title" required placeholder="Enter a descriptive title">
+				</div>
+				<div class="form-group">
+					<label for="content">Content</label>
+					<textarea id="content" name="content" required placeholder="Share your experience, question, or alert..."></textarea>
+				</div>
+				<div class="form-group">
+					<label for="location">Location (Optional)</label>
+					<input type="text" id="location" name="location" placeholder="e.g., Maharashtra, India">
+				</div>
+				<div class="form-group">
+					<label for="disease">Disease Name (Optional)</label>
+					<input type="text" id="disease" name="disease" placeholder="e.g., Northern Leaf Blight">
+				</div>
+				<button type="submit" class="submit-btn">
+					<i class="fas fa-paper-plane"></i> Post
+				</button>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		function showTab(tabName) {
+			// Hide all tabs
+			document.querySelectorAll('.tab-content').forEach(tab => {
+				tab.classList.remove('active');
+			});
+			document.querySelectorAll('.tab').forEach(tab => {
+				tab.classList.remove('active');
+			});
+			
+			// Show selected tab
+			document.getElementById(tabName).classList.add('active');
+			event.target.classList.add('active');
+		}
+
+		function openModal() {
+			document.getElementById('createPostModal').classList.add('active');
+		}
+
+		function closeModal() {
+			document.getElementById('createPostModal').classList.remove('active');
+		}
+
+		// Close modal when clicking outside
+		document.getElementById('createPostModal').addEventListener('click', function(e) {
+			if (e.target === this) {
+				closeModal();
+			}
+		});
+	</script>
+</body>
+</html>

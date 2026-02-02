@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Prediction History - CropCare AI</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+	<style>
+		.history-container {
+			max-width: 1200px;
+			margin: 40px auto;
+			padding: 20px;
+		}
+		.history-header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+		.history-header h1 {
+			color: var(--primary-600);
+			font-size: 36px;
+			margin-bottom: 10px;
+		}
+		.history-header p {
+			color: var(--gray-600);
+			font-size: 16px;
+		}
+		.history-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+			gap: 24px;
+			margin-top: 30px;
+		}
+		.history-card {
+			background: white;
+			border-radius: 16px;
+			padding: 24px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+			border: 1px solid var(--gray-200);
+			transition: all 0.3s ease;
+		}
+		.history-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+		}
+		.history-card-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: start;
+			margin-bottom: 16px;
+			padding-bottom: 16px;
+			border-bottom: 2px solid var(--gray-100);
+		}
+		.prediction-label {
+			font-size: 18px;
+			font-weight: 700;
+			color: var(--primary-600);
+			flex: 1;
+		}
+		.timestamp {
+			font-size: 12px;
+			color: var(--gray-500);
+			text-align: right;
+		}
+		.history-image {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+			border-radius: 12px;
+			margin-bottom: 16px;
+		}
+		.history-details {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+		.detail-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 8px 12px;
+			background: var(--gray-50);
+			border-radius: 8px;
+			font-size: 14px;
+		}
+		.detail-label {
+			color: var(--gray-600);
+			font-weight: 500;
+		}
+		.detail-value {
+			color: var(--dark-800);
+			font-weight: 600;
+		}
+		.risk-badge {
+			display: inline-block;
+			padding: 6px 12px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 600;
+			margin-top: 12px;
+		}
+		.risk-low {
+			background: #d1fae5;
+			color: #065f46;
+		}
+		.risk-moderate {
+			background: #fef3c7;
+			color: #92400e;
+		}
+		.risk-high {
+			background: #fee2e2;
+			color: #991b1b;
+		}
+		.caption-text {
+			font-size: 14px;
+			color: var(--gray-700);
+			font-style: italic;
+			margin-top: 12px;
+			padding: 12px;
+			background: var(--gray-50);
+			border-radius: 8px;
+			border-left: 3px solid var(--primary-500);
+		}
+		.empty-state {
+			text-align: center;
+			padding: 60px 20px;
+			color: var(--gray-500);
+		}
+		.empty-state i {
+			font-size: 64px;
+			margin-bottom: 20px;
+			color: var(--gray-300);
+		}
+		.empty-state h3 {
+			font-size: 24px;
+			margin-bottom: 12px;
+			color: var(--gray-600);
+		}
+		.empty-state a {
+			display: inline-block;
+			margin-top: 20px;
+			padding: 12px 24px;
+			background: var(--primary-500);
+			color: white;
+			text-decoration: none;
+			border-radius: 10px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+		.empty-state a:hover {
+			background: var(--primary-600);
+			transform: translateY(-2px);
+		}
+		.alert {
+			padding: 12px 16px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			font-size: 14px;
+		}
+		.alert-error {
+			background: #fee2e2;
+			color: #991b1b;
+			border: 1px solid #fecaca;
+		}
+		.alert-success {
+			background: #d1fae5;
+			color: #065f46;
+			border: 1px solid #a7f3d0;
+		}
+		.alert-info {
+			background: #dbeafe;
+			color: #1e40af;
+			border: 1px solid #bfdbfe;
+		}
+		.btn-export:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<div class="logo">
+			<div class="logo-icon">C</div>
+			CropCare AI
+		</div>
+		<div class="nav-links">
+			<a href="/"><i class="fas fa-home"></i> Home</a>
+			{% if session.user %}
+				<a href="/predict"><i class="fas fa-microscope"></i> Predict</a>
+				<a href="/history" class="active"><i class="fas fa-history"></i> History</a>
+				<a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+				<a href="/community"><i class="fas fa-users"></i> Community</a>
+			{% endif %}
+			<a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+			{% if session.user %}
+				<div class="user-profile">
+					<div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+					<span class="user-name">{{ session.user.name }}</span>
+				</div>
+				<a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+			{% else %}
+				<a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<div class="history-container">
+		<div class="history-header">
+			<h1><i class="fas fa-history"></i> Prediction History</h1>
+			<p>View all your past crop disease predictions</p>
+			{% if predictions %}
+			<div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center;">
+				<a href="/export/pdf" class="btn-export" style="background: #ef4444; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+					<i class="fas fa-file-pdf"></i> Export PDF
+				</a>
+				<a href="/export/csv" class="btn-export" style="background: #10b981; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+					<i class="fas fa-file-csv"></i> Export CSV
+				</a>
+			</div>
+			{% endif %}
+		</div>
+
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="alert alert-{{ category }}">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+
+		{% if predictions %}
+			<div class="history-grid">
+				{% for pred in predictions %}
+					<div class="history-card">
+						<div class="history-card-header">
+							<div class="prediction-label">
+								<i class="fas fa-leaf"></i> {{ pred.prediction }}
+							</div>
+							<div class="timestamp">
+								<i class="fas fa-clock"></i><br>
+								{{ pred.timestamp.strftime('%b %d, %Y') }}<br>
+								{{ pred.timestamp.strftime('%I:%M %p') }}
+							</div>
+						</div>
+
+						{% if pred.image_filename %}
+							<img src="/static/uploads/{{ pred.image_filename }}" alt="Leaf Image" class="history-image" onerror="this.style.display='none'">
+						{% endif %}
+
+						<div class="history-details">
+							<div class="detail-row">
+								<span class="detail-label"><i class="fas fa-temperature-high"></i> Temperature</span>
+								<span class="detail-value">{{ pred.temperature }}°C</span>
+							</div>
+							<div class="detail-row">
+								<span class="detail-label"><i class="fas fa-tint"></i> Humidity</span>
+								<span class="detail-value">{{ pred.humidity }}%</span>
+							</div>
+							<div class="detail-row">
+								<span class="detail-label"><i class="fas fa-cloud-rain"></i> Rainfall</span>
+								<span class="detail-value">{{ pred.rainfall }}mm</span>
+							</div>
+						</div>
+
+						{% if pred.risk_message %}
+							{% if 'Low Risk' in pred.risk_message %}
+								<div class="risk-badge risk-low">{{ pred.risk_message }}</div>
+							{% elif 'Moderate Risk' in pred.risk_message %}
+								<div class="risk-badge risk-moderate">{{ pred.risk_message }}</div>
+							{% else %}
+								<div class="risk-badge risk-high">{{ pred.risk_message }}</div>
+							{% endif %}
+						{% endif %}
+
+						{% if pred.caption %}
+							<div class="caption-text">
+								<i class="fas fa-quote-left"></i> {{ pred.caption }}
+							</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<div class="empty-state">
+				<i class="fas fa-inbox"></i>
+				<h3>No Predictions Yet</h3>
+				<p>Start making predictions to see your history here</p>
+				<a href="/predict">
+					<i class="fas fa-microscope"></i> Make Your First Prediction
+				</a>
+			</div>
+		{% endif %}
+	</div>
+</body>
+</html>

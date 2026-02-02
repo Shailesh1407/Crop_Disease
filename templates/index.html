@@ -4,326 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CropCare AI - Predict Crop Disease</title>
-    <style>
-/* ===========================
-   RESET & GLOBAL STYLES
-=========================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background: linear-gradient(135deg, #f5f9f8 0%, #e8f4f1 100%);
-    min-height: 100vh;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-a {
-    text-decoration: none;
-}
-
-/* ===========================
-   CONTAINER
-=========================== */
-.container {
-    width: 100%;
-    max-width: 1200px;
-}
-
-/* ===========================
-   NAVBAR
-=========================== */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    margin-bottom: 30px;
-    width: 100%;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 700;
-    font-size: 24px;
-    color: #2d6a4f;
-}
-
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #40916c 0%, #2d6a4f 100%);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 8px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 6px;
-}
-
-.nav-item {
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
-    color: #495057;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-item:hover {
-    background: #e9ecef;
-    color: #2d6a4f;
-}
-
-.nav-item.active {
-    background: #40916c;
-    color: white;
-    box-shadow: 0 2px 8px rgba(64, 145, 108, 0.3);
-}
-
-/* ===========================
-   MAIN CONTENT
-=========================== */
-.main-content {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 30px;
-    width: 100%;
-}
-
-/* ===========================
-   MAIN LAYOUT (FORM + RESULTS)
-=========================== */
-.main-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin: 20px 0;
-}
-
-/* FORM SECTION */
-.form-section {
-    background: #f5f7fa;
-    border-radius: 12px;
-    padding: 25px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 8px;
-    color: #495057;
-}
-
-input[type="text"],
-input[type="number"],
-textarea,
-input[type="file"] {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s;
-    background: white;
-}
-
-input:focus,
-textarea:focus {
-    border-color: #40916c;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.2);
-}
-
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.predict-button {
-    background: #40916c;
-    color: white;
-    border: none;
-    padding: 14px 25px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.predict-button:hover {
-    background: #2d6a4f;
-    box-shadow: 0 4px 12px rgba(64, 145, 108, 0.3);
-}
-
-/* ===========================
-   RESULTS SECTION ENHANCEMENTS
-=========================== */
-.results-section {
-    background: #f5f7fa; /* light green */
-    border-radius: 12px;
-    padding: 25px;
-}
-
-/* Prediction Card with gradient */
-.prediction-card {
-    padding: 20px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #f2f7f2 100%);
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    margin-bottom: 20px;
-    margin-top: 10px;
-    color: black;
-}
-
-.prediction-card:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-}
-
-.prediction-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: black; /* dark green */
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.prediction-title i {
-    color: #2e7d32; /* leaf icon green */
-    font-size: 26px;
-}
-
-.prediction-details {
-    display: grid;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.prediction-details p {
-    margin: 5px 0;
-}
-
-/* Weather info with icon */
-.prediction-details p strong {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.prediction-details p i {
-    color: #0288d1; /* soft blue for weather icons */
-}
-
-/* Image styling */
-.prediction-image {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 12px;
-    margin-top: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Risk Card */
-.risk-card {
-    background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%);
-    border-left: 6px solid #ffb300;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    color: #795548;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.risk-card p {
-    margin: 5px 0;
-}
-
-/* Placeholder card */
-.results-placeholder {
-    background: linear-gradient(135deg, #b2dfdb 0%, #e8f5e9 100%);
-    border-radius: 8px;
-    padding: 40px 20px;
-    text-align: center;
-    color: #004d40; /* dark teal */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.placeholder-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-    color: #00796b; /* teal icon */
-}
-
-.learn-more-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #81c784 0%, #4caf50 100%);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-decoration: none;
-    margin-top: 10px;
-    transition: 0.3s;
-    font-weight: 600;
-}
-
-.learn-more-btn:hover {
-    background: linear-gradient(135deg, #66bb6a 0%, #388e3c 100%);
-    box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
-}
-
-/* ===========================
-   RESPONSIVE
-=========================== */
-@media (max-width: 768px) {
-    .main-layout {
-        grid-template-columns: 1fr;
-    }
-
-    nav {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-</style>
+    <link rel="stylesheet" href="/static/css/style.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -332,15 +13,44 @@ textarea {
     <nav>
         <div class="logo">
             <div class="logo-icon">C</div>
-            CropCare AI - Crop Disease Prediction System
+            CropCare AI
         </div>
-        
+        <div class="nav-links">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            {% if session.user %}
+                <a href="/predict" class="active"><i class="fas fa-microscope"></i> Predict</a>
+                <a href="/history"><i class="fas fa-history"></i> History</a>
+                <a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a href="/community"><i class="fas fa-users"></i> Community</a>
+            {% endif %}
+            <a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+            
+            {% if session.user %}
+                <div class="user-profile">
+                    <div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+                    <span class="user-name">{{ session.user.name }}</span>
+                </div>
+                <a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+            {% endif %}
+        </div>
     </nav>
 <div class="main-content">
-            
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div style="max-width: 800px; margin: 20px auto;">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="padding: 12px 16px; border-radius: 10px; margin-bottom: 12px; font-size: 14px;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
             <!-- ML Powered Section -->
-            
+
 
             <!-- Side by Side Layout -->
             <div class="main-layout">
@@ -382,6 +92,14 @@ textarea {
                 <!-- Right Side - Results -->
                 <div class="results-section">
                     <h2>Prediction Results</h2>
+                    {% if error %}
+                        <div class="prediction-card" style="border-left-color:#b94a48;background:linear-gradient(135deg,#fff 0%,#fdecea 100%);">
+                            <div class="prediction-title" style="color:#b94a48;">
+                                <i class="fas fa-triangle-exclamation"></i>
+                                <span>{{ error }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
                     {% if prediction %}
                         <div class="prediction-card">
                             <div class="prediction-title">
@@ -399,6 +117,11 @@ textarea {
                                     <p><strong>Weather Conditions:</strong></p>
                                     <p>{{ temperature }}°C | {{ humidity }}% humidity | {{ rainfall }}mm rainfall</p>
                                 </div>
+                                {% if risk_message %}
+                                <div style="margin-top:10px;">
+                                    <p><strong>Risk Assessment:</strong> {{ risk_message }}</p>
+                                </div>
+                                {% endif %}
                             </div>
                             
                             <img src="{{ url_for('static', filename='uploads/' + img_file) }}" alt="Leaf Image" class="prediction-image">

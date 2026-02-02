@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CropCare AI - Home</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="home-page">
+	<nav>
+		<div class="logo">
+			<div class="logo-icon">C</div>
+			CropCare AI
+		</div>
+		<div class="nav-links">
+			<a href="/" class="active"><i class="fas fa-home"></i> Home</a>
+			{% if session.user %}
+				<a href="/predict"><i class="fas fa-microscope"></i> Predict</a>
+				<a href="/history"><i class="fas fa-history"></i> History</a>
+				<a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+				<a href="/community"><i class="fas fa-users"></i> Community</a>
+			{% endif %}
+			<a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+			<a href="/about"><i class="fas fa-info-circle"></i> About</a>
+			
+			{% if session.user %}
+				<div class="user-profile">
+					<div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+					<span class="user-name">{{ session.user.name }}</span>
+				</div>
+				<a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+			{% else %}
+				<a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<div class="hero">
+		<div>
+			<h1>Detect Crop Diseases early with AI</h1>
+			<p style="color:#2f5d50;font-weight:700;margin-bottom:6px;">Faster insights. Practical actions. Better yields.</p>
+			<p>
+				CropCare AI helps farmers and agronomists detect crop diseases by combining leaf images, text descriptions, and local weather conditions.
+				Upload a leaf photo, describe visible symptoms, and enter temperature, humidity, and rainfall to receive a predicted disease with actionable guidance.
+			</p>
+			<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
+				<a class="cta" href="/predict"><i class="fas fa-microscope"></i> Start Prediction</a>
+				<a class="learn-more-btn" href="#how-it-works"><i class="fas fa-circle-question"></i> Learn how it works</a>
+			</div>
+			
+		</div>
+		<div class="hero-card">
+			<h3><i class="fas fa-gauge-high"></i> Why CropCare AI</h3>
+			<ul class="hero-list">
+				<li>Multi‑modal model improves accuracy in tough cases</li>
+				<li>Clear advisory with organic and chemical options</li>
+				<li>Simple risk message driven by weather context</li>
+			</ul>
+			<div class="chips" style="margin-top:12px;">
+				<span class="chip"><i class="fas fa-leaf"></i> Field‑ready</span>
+				<span class="chip"><i class="fas fa-clock"></i> Under a minute</span>
+				<span class="chip"><i class="fas fa-check"></i> Easy to use</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="sections">
+		<div class="card">
+			<h3><i class="fas fa-brain"></i> Multi-modal AI</h3>
+			<p>Combines sentence embeddings, ResNet50 image features, and weather data for robust predictions.</p>
+		</div>
+		<div class="card">
+			<h3><i class="fas fa-syringe"></i> Practical Advisory</h3>
+			<p>Actionable organic and chemical control options with brand suggestions and spray schedules.</p>
+		</div>
+		<div class="card">
+			<h3><i class="fas fa-shield-halved"></i> Risk Awareness</h3>
+			<p>Simple low/moderate/high risk message derived from local weather conditions.</p>
+		</div>
+	</div>
+
+	<div id="how-it-works" class="steps container">
+		<h2>Get results in four simple steps</h2>
+		<div class="steps-grid">
+			<div class="step">
+				<div class="step-icon"><i class="fas fa-image"></i></div>
+				<h4>1. Upload Leaf Image</h4>
+				<p>Use a clear, well-lit photo focused on the symptomatic region.</p>
+			</div>
+			<div class="step">
+				<div class="step-icon"><i class="fas fa-pen"></i></div>
+				<h4>2. Add Description</h4>
+				<p>Briefly describe what you see: color, spots, edges, curling.</p>
+			</div>
+			<div class="step">
+				<div class="step-icon"><i class="fas fa-cloud-sun-rain"></i></div>
+				<h4>3. Enter Weather</h4>
+				<p>Provide temperature, humidity, and rainfall to improve accuracy.</p>
+			</div>
+			<div class="step">
+				<div class="step-icon"><i class="fas fa-stethoscope"></i></div>
+				<h4>4. Review Advisory</h4>
+				<p>See the predicted disease, risk, and recommended next actions.</p>
+			</div>
+		</div>
+		
+	</div>
+
+	
+	
+</body>
+</html>
+

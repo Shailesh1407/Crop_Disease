@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Analytics Dashboard - CropCare AI</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<style>
+		.analytics-container {
+			max-width: 1400px;
+			margin: 40px auto;
+			padding: 20px;
+		}
+		.analytics-header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+		.analytics-header h1 {
+			color: var(--primary-600);
+			font-size: 36px;
+			margin-bottom: 10px;
+		}
+		.stats-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			gap: 24px;
+			margin-bottom: 40px;
+		}
+		.stat-card {
+			background: white;
+			border-radius: 16px;
+			padding: 24px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+			border-left: 4px solid var(--primary-500);
+			transition: all 0.3s ease;
+		}
+		.stat-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+		}
+		.stat-icon {
+			width: 50px;
+			height: 50px;
+			border-radius: 12px;
+			background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-size: 24px;
+			margin-bottom: 16px;
+		}
+		.stat-value {
+			font-size: 32px;
+			font-weight: 700;
+			color: var(--dark-900);
+			margin-bottom: 8px;
+		}
+		.stat-label {
+			font-size: 14px;
+			color: var(--gray-600);
+			font-weight: 500;
+		}
+		.charts-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+			gap: 24px;
+			margin-bottom: 40px;
+		}
+		.chart-card {
+			background: white;
+			border-radius: 16px;
+			padding: 24px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		}
+		.chart-card h3 {
+			color: var(--dark-800);
+			margin-bottom: 20px;
+			font-size: 18px;
+		}
+		.empty-state {
+			text-align: center;
+			padding: 60px 20px;
+			background: white;
+			border-radius: 16px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		}
+		.empty-state i {
+			font-size: 64px;
+			color: var(--gray-300);
+			margin-bottom: 20px;
+		}
+		.empty-state h3 {
+			font-size: 24px;
+			color: var(--gray-600);
+			margin-bottom: 12px;
+		}
+		.empty-state a {
+			display: inline-block;
+			margin-top: 20px;
+			padding: 12px 24px;
+			background: var(--primary-500);
+			color: white;
+			text-decoration: none;
+			border-radius: 10px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+		.empty-state a:hover {
+			background: var(--primary-600);
+			transform: translateY(-2px);
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<div class="logo">
+			<div class="logo-icon">C</div>
+			CropCare AI
+		</div>
+		<div class="nav-links">
+			<a href="/"><i class="fas fa-home"></i> Home</a>
+			{% if session.user %}
+				<a href="/predict"><i class="fas fa-microscope"></i> Predict</a>
+				<a href="/analytics" class="active"><i class="fas fa-chart-line"></i> Analytics</a>
+			{% endif %}
+			<a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+			<a href="/about"><i class="fas fa-info-circle"></i> About</a>
+			
+			{% if session.user %}
+				<div class="user-profile">
+					<div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+					<span class="user-name">{{ session.user.name }}</span>
+				</div>
+				<a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+			{% else %}
+				<a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<div class="analytics-container">
+		<div class="analytics-header">
+			<h1><i class="fas fa-chart-line"></i> Analytics Dashboard</h1>
+			<p>Insights and statistics from your crop disease predictions</p>
+		</div>
+
+		{% if stats and stats.total > 0 %}
+			<!-- Statistics Cards -->
+			<div class="stats-grid">
+				<div class="stat-card">
+					<div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+					<div class="stat-value">{{ stats.total }}</div>
+					<div class="stat-label">Total Predictions</div>
+				</div>
+				<div class="stat-card">
+					<div class="stat-icon"><i class="fas fa-virus"></i></div>
+					<div class="stat-value">{{ stats.diseases|length }}</div>
+					<div class="stat-label">Unique Diseases</div>
+				</div>
+				<div class="stat-card">
+					<div class="stat-icon"><i class="fas fa-temperature-high"></i></div>
+					<div class="stat-value">{{ "%.1f"|format(stats.avg_temp) }}°C</div>
+					<div class="stat-label">Avg Temperature</div>
+				</div>
+				<div class="stat-card">
+					<div class="stat-icon"><i class="fas fa-tint"></i></div>
+					<div class="stat-value">{{ "%.1f"|format(stats.avg_humidity) }}%</div>
+					<div class="stat-label">Avg Humidity</div>
+				</div>
+			</div>
+
+			<!-- Charts -->
+			<div class="charts-grid">
+				<!-- Disease Distribution Chart -->
+				<div class="chart-card">
+					<h3><i class="fas fa-chart-pie"></i> Disease Distribution</h3>
+					<canvas id="diseaseChart"></canvas>
+				</div>
+
+				<!-- Risk Distribution Chart -->
+				<div class="chart-card">
+					<h3><i class="fas fa-chart-bar"></i> Risk Level Distribution</h3>
+					<canvas id="riskChart"></canvas>
+				</div>
+			</div>
+
+			<!-- Recent Predictions Table -->
+			<div class="chart-card">
+				<h3><i class="fas fa-clock"></i> Recent Predictions</h3>
+				<table style="width: 100%; border-collapse: collapse;">
+					<thead>
+						<tr style="background: var(--gray-100); text-align: left;">
+							<th style="padding: 12px;">Date</th>
+							<th style="padding: 12px;">Disease</th>
+							<th style="padding: 12px;">Temperature</th>
+							<th style="padding: 12px;">Humidity</th>
+							<th style="padding: 12px;">Risk</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for pred in stats.recent %}
+						<tr style="border-bottom: 1px solid var(--gray-200);">
+							<td style="padding: 12px;">{{ pred.timestamp.strftime('%b %d, %Y') if pred.timestamp else 'N/A' }}</td>
+							<td style="padding: 12px; font-weight: 600; color: var(--primary-600);">{{ pred.prediction }}</td>
+							<td style="padding: 12px;">{{ pred.temperature }}°C</td>
+							<td style="padding: 12px;">{{ pred.humidity }}%</td>
+							<td style="padding: 12px;">
+								{% if 'Low' in pred.risk_message %}
+									<span style="background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Low</span>
+								{% elif 'Moderate' in pred.risk_message %}
+									<span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Moderate</span>
+								{% else %}
+									<span style="background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">High</span>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<script>
+				// Disease Distribution Chart
+				const diseaseCtx = document.getElementById('diseaseChart').getContext('2d');
+				new Chart(diseaseCtx, {
+					type: 'doughnut',
+					data: {
+						labels: {{ stats.diseases.keys()|list|tojson }},
+						datasets: [{
+							data: {{ stats.diseases.values()|list|tojson }},
+							backgroundColor: [
+								'#10b981', '#059669', '#047857', '#065f46',
+								'#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6'
+							],
+							borderWidth: 2,
+							borderColor: '#fff'
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							legend: {
+								position: 'bottom'
+							}
+						}
+					}
+				});
+
+				// Risk Distribution Chart
+				const riskCtx = document.getElementById('riskChart').getContext('2d');
+				new Chart(riskCtx, {
+					type: 'bar',
+					data: {
+						labels: ['Low Risk', 'Moderate Risk', 'High Risk'],
+						datasets: [{
+							label: 'Number of Predictions',
+							data: [{{ stats.risk_distribution.Low }}, {{ stats.risk_distribution.Moderate }}, {{ stats.risk_distribution.High }}],
+							backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+							borderRadius: 8
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								ticks: {
+									stepSize: 1
+								}
+							}
+						}
+					}
+				});
+			</script>
+		{% else %}
+			<div class="empty-state">
+				<i class="fas fa-chart-line"></i>
+				<h3>No Data Available</h3>
+				<p>Start making predictions to see your analytics</p>
+				<a href="/predict">
+					<i class="fas fa-microscope"></i> Make Your First Prediction
+				</a>
+			</div>
+		{% endif %}
+	</div>
+</body>
+</html>

@@ -6,3 +6,9 @@ sentence-transformers
 numpy
 scikit-learn
 joblib
+firebase-admin
+pyrebase4
+python-dotenv
+reportlab
+matplotlib
+pandas

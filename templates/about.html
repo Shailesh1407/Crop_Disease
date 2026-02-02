@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>About - CropCare AI</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+	<nav>
+		<div class="logo">
+			<div class="logo-icon">C</div>
+			CropCare AI
+		</div>
+		<div class="nav-links">
+			<a href="/"><i class="fas fa-home"></i> Home</a>
+			{% if session.user %}
+				<a href="/predict"><i class="fas fa-microscope"></i> Predict</a>
+				<a href="/history"><i class="fas fa-history"></i> History</a>
+			{% endif %}
+			<a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+			<a href="/about" class="active"><i class="fas fa-info-circle"></i> About</a>
+			
+			{% if session.user %}
+				<div class="user-profile">
+					<div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+					<span class="user-name">{{ session.user.name }}</span>
+				</div>
+				<a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+			{% else %}
+				<a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<div class="page-container">
+		<div class="page-header">
+			<h1>About CropCare AI</h1>
+			<p>Empowering farmers with AI-driven crop disease detection and management solutions</p>
+		</div>
+
+		<div class="content-section">
+			<h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+			<p>CropCare AI is dedicated to helping farmers and agronomists detect crop diseases early, prevent losses, and improve yields through cutting-edge artificial intelligence technology. We combine image analysis, natural language processing, and weather data to provide accurate, actionable insights.</p>
+		</div>
+
+		<div class="content-section">
+			<h2><i class="fas fa-cogs"></i> How It Works</h2>
+			<div class="tech-grid">
+				<div class="tech-card">
+					<div class="tech-icon"><i class="fas fa-image"></i></div>
+					<h3>Image Analysis</h3>
+					<p>ResNet50 deep learning model extracts features from leaf images to identify visual disease patterns.</p>
+				</div>
+				<div class="tech-card">
+					<div class="tech-icon"><i class="fas fa-language"></i></div>
+					<h3>Text Understanding</h3>
+					<p>BERT-based sentence transformers analyze symptom descriptions for context-aware predictions.</p>
+				</div>
+				<div class="tech-card">
+					<div class="tech-icon"><i class="fas fa-cloud-sun-rain"></i></div>
+					<h3>Weather Integration</h3>
+					<p>Temperature, humidity, and rainfall data enhance prediction accuracy by considering environmental factors.</p>
+				</div>
+				<div class="tech-card">
+					<div class="tech-icon"><i class="fas fa-brain"></i></div>
+					<h3>Multi-Modal AI</h3>
+					<p>Combines all inputs through machine learning classifiers for robust disease identification.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="content-section">
+			<h2><i class="fas fa-seedling"></i> Supported Crops</h2>
+			<p>Currently, CropCare AI supports disease detection for:</p>
+			<ul class="feature-list">
+				<li><i class="fas fa-apple-whole"></i> <strong>Apple:</strong> Apple Scab, Black Rot, Cedar Rust, and Healthy detection</li>
+				<li><i class="fas fa-seedling"></i> <strong>Corn:</strong> Common Rust, Northern Leaf Blight, Cercospora Leaf Spot, and Healthy detection</li>
+			</ul>
+			<p>We are continuously expanding our database to include more crops and diseases.</p>
+		</div>
+
+		<div class="content-section">
+			<h2><i class="fas fa-lightbulb"></i> Key Features</h2>
+			<div class="features-grid">
+				<div class="feature-item">
+					<i class="fas fa-bolt"></i>
+					<h4>Fast Predictions</h4>
+					<p>Get results in under a minute</p>
+				</div>
+				<div class="feature-item">
+					<i class="fas fa-shield-alt"></i>
+					<h4>Risk Assessment</h4>
+					<p>Weather-based risk evaluation</p>
+				</div>
+				<div class="feature-item">
+					<i class="fas fa-leaf"></i>
+					<h4>Organic Solutions</h4>
+					<p>Eco-friendly treatment options</p>
+				</div>
+				<div class="feature-item">
+					<i class="fas fa-flask"></i>
+					<h4>Chemical Treatments</h4>
+					<p>Recommended fungicides with brands</p>
+				</div>
+				<div class="feature-item">
+					<i class="fas fa-calendar-alt"></i>
+					<h4>Spray Schedules</h4>
+					<p>Optimal timing for treatments</p>
+				</div>
+				<div class="feature-item">
+					<i class="fas fa-undo"></i>
+					<h4>Crop Rotation</h4>
+					<p>Alternative crop suggestions</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="content-section">
+			<h2><i class="fas fa-users"></i> Who Can Use CropCare AI</h2>
+			<ul class="user-list">
+				<li><strong>Farmers:</strong> Early disease detection to protect crops and maximize yields</li>
+				<li><strong>Agronomists:</strong> Professional diagnostic tool for field assessments</li>
+				<li><strong>Agricultural Students:</strong> Learning resource for crop disease identification</li>
+				<li><strong>Extension Officers:</strong> Support tool for farmer advisory services</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
+

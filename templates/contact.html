@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contact - CropCare AI</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+	<nav>
+		<div class="logo">
+			<div class="logo-icon">C</div>
+			CropCare AI
+		</div>
+		<div class="nav-links">
+			<a href="/"><i class="fas fa-home"></i> Home</a>
+			{% if session.user %}
+				<a href="/predict"><i class="fas fa-microscope"></i> Predict</a>
+				<a href="/history"><i class="fas fa-history"></i> History</a>
+			{% endif %}
+			<a href="/diseases"><i class="fas fa-virus"></i> Diseases</a>
+			<a href="/about"><i class="fas fa-info-circle"></i> About</a>
+			
+			{% if session.user %}
+				<div class="user-profile">
+					<div class="user-avatar">{{ session.user.name[0] if session.user.name else 'U' }}</div>
+					<span class="user-name">{{ session.user.name }}</span>
+				</div>
+				<a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+			{% else %}
+				<a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<div class="page-container">
+		<div class="page-header">
+			<h1>Contact Us</h1>
+			<p>Get in touch with the CropCare AI team</p>
+		</div>
+
+		<div class="contact-layout">
+			<div class="contact-info">
+				<h2><i class="fas fa-envelope"></i> Get in Touch</h2>
+				<p>Have questions, feedback, or need support? We're here to help!</p>
+				
+				<div class="contact-details">
+					<div class="contact-item">
+						<i class="fas fa-envelope"></i>
+						<div>
+							<h3>Email</h3>
+							<p>support@cropcareai.com</p>
+							<p>info@cropcareai.com</p>
+						</div>
+					</div>
+					<div class="contact-item">
+						<i class="fas fa-phone"></i>
+						<div>
+							<h3>Phone</h3>
+							<p>+1 (555) 123-4567</p>
+							<p>Monday - Friday: 9 AM - 5 PM</p>
+						</div>
+					</div>
+					<div class="contact-item">
+						<i class="fas fa-map-marker-alt"></i>
+						<div>
+							<h3>Address</h3>
+							<p>123 Agricultural Way</p>
+							<p>Farming City, FC 12345</p>
+						</div>
+					</div>
+					<div class="contact-item">
+						<i class="fas fa-clock"></i>
+						<div>
+							<h3>Business Hours</h3>
+							<p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+							<p>Saturday: 10:00 AM - 2:00 PM</p>
+							<p>Sunday: Closed</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="social-links">
+					<h3>Follow Us</h3>
+					<div class="social-icons">
+						<a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+						<a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+						<a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+						<a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+						<a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+					</div>
+				</div>
+			</div>
+
+			<div class="contact-form-container">
+				<h2><i class="fas fa-paper-plane"></i> Send us a Message</h2>
+				{% if success %}
+				<div class="prediction-card" style="border-left-color:#10b981;background:linear-gradient(135deg,#fff 0%,#ecfdf5 100%);margin-bottom:20px;">
+					<p style="color:#10b981;font-weight:600;">{{ message }}</p>
+				</div>
+				{% endif %}
+				<form class="contact-form" method="POST">
+					<div class="form-group">
+						<label for="name">Name *</label>
+						<input type="text" id="name" name="name" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email *</label>
+						<input type="email" id="email" name="email" required>
+					</div>
+					<div class="form-group">
+						<label for="subject">Subject *</label>
+						<input type="text" id="subject" name="subject" required>
+					</div>
+					<div class="form-group">
+						<label for="message">Message *</label>
+						<textarea id="message" name="message" rows="6" required></textarea>
+					</div>
+					<button type="submit" class="predict-button">
+						<i class="fas fa-paper-plane"></i> Send Message
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="content-section">
+			<h2><i class="fas fa-headset"></i> Support Options</h2>
+			<div class="support-grid">
+				<div class="support-card">
+					<i class="fas fa-question-circle"></i>
+					<h3>FAQ</h3>
+					<p>Find answers to common questions in our FAQ section.</p>
+					<a href="/resources" class="support-link">View FAQ</a>
+				</div>
+				<div class="support-card">
+					<i class="fas fa-book"></i>
+					<h3>Documentation</h3>
+					<p>Access comprehensive guides and tutorials.</p>
+					<a href="/resources" class="support-link">View Docs</a>
+				</div>
+				<div class="support-card">
+					<i class="fas fa-comments"></i>
+					<h3>Community Forum</h3>
+					<p>Connect with other farmers and share experiences.</p>
+					<a href="#" class="support-link">Join Forum</a>
+				</div>
+				<div class="support-card">
+					<i class="fas fa-bug"></i>
+					<h3>Report Issues</h3>
+					<p>Found a bug or have a feature request? Let us know!</p>
+					<a href="#" class="support-link">Report Issue</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
