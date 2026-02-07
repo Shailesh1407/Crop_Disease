@@ -67,10 +67,3 @@ This helps the model learn disease-environment correlations.
 
 ## 📈 Model Performance
 * **Overall accuracy:** **81.4%**
-
-## 👨‍💻 Author
-
-**Shaileshnathan L**
-
-* GitHub: [https://github.com/Shailesh1407](https://github.com/Shailesh1407)
-* LinkedIn: [https://www.linkedin.com/in/shaileshnathan-l-5bb465276](https://www.linkedin.com/in/shaileshnathan-l-5bb465276)
