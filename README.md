@@ -4,29 +4,6 @@
 
 The **Crop Disease Prediction System** is an advanced, production-ready web application that leverages machine learning, computer vision, and natural language processing to diagnose crop diseases with high accuracy. This intelligent platform empowers farmers, agronomists, and agricultural experts to identify plant diseases through image analysis, receive actionable recommendations, and access comprehensive disease information—all in a user-friendly, secure interface.
 
----
-
-## Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [Key Features](#key-features)
-3. [Technology Stack](#technology-stack)
-4. [System Architecture](#system-architecture)
-5. [Installation & Setup](#installation--setup)
-6. [Configuration](#configuration)
-7. [Usage Guide](#usage-guide)
-8. [Project Structure](#project-structure)
-9. [Database Schema](#database-schema)
-10. [API Documentation](#api-documentation)
-11. [Model Architecture](#model-architecture)
-12. [Deployment](#deployment)
-13. [Contributing](#contributing)
-14. [Troubleshooting](#troubleshooting)
-15. [License](#license)
-16. [Support](#support)
-
----
-
 ## Project Overview
 
 ### Purpose
